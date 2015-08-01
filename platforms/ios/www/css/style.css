@@ -1,0 +1,364 @@
+
+/* My Stocks */
+
+#my-stocks .item-content {
+  padding: 5px 0px 5px 5px;
+}
+
+#my-stocks h3 {
+  font-size: 4.75vmin;
+}
+
+#my-stocks h6 {
+  font-size: 3vmin;
+  font-weight: 300;
+}
+
+#my-stocks .stock-price-time {
+  padding-right: 10px;
+  text-align: right;
+}
+
+#my-stocks .stock-price-time h3 {
+  font-weight: normal;
+}
+
+#my-stocks .stock-change {
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+  margin-right: -10px;
+}
+
+#my-stocks .stock-change h3,
+#my-stocks .stock-change h6  {
+  color: #fff;
+}
+
+#my-stocks .inset-shadow {
+  -webkit-box-shadow: inset 0px 0px 15px rgba(0,0,0,.15);
+}
+
+
+
+
+/* Search */
+
+#search {
+  background-color: rgba(20, 20, 20, .975);
+}
+
+#search .search-input {
+  background-color: rgba(255,255,255,.1);
+}
+
+#search input {
+  color: #fff;
+}
+
+
+
+
+
+/* News Card */
+
+#stock-news .icon {
+  color: #ccc;
+  font-size: 14pt;
+  right: 0;
+}
+
+#stock-news h2 {
+  font-weight: 400;
+  white-space: normal;
+}
+
+#stock-news p {
+  color: #222;
+  font-size: 9pt;
+  margin: 10px auto 0;
+  white-space: normal;
+}
+
+#stock-news .item-icon-right {
+  padding-right: 30px;
+}
+
+
+
+
+/* Notes Card */
+
+#stock-notes .add-stock-note {
+  border: 1px solid #ff9800;
+  border-radius: 3px;
+  color: #ff9800;
+  float: right;
+  font-size: 11pt;
+  font-weight: 300;
+  padding: 0 5px;
+}
+
+#stock-note-title {
+  border-bottom: 1px solid #eee;
+  padding: 0 5px;
+}
+
+#stock-note-body {
+  min-height: 100px;
+  padding: 10px 5px 5px;
+}
+
+
+
+
+/* Market Data Card */
+
+#market-data-card {
+  font-size: 3.25vmin;
+}
+
+#market-data-card .col-20 {
+  font-weight: bolder;
+}
+
+#market-data-card .col-20:last-of-type {
+  text-align: right;
+}
+
+#market-data-card .last-trade {
+  font-size: 3vmin;
+  float: right;
+}
+
+
+
+
+/* Stock Navbar */
+
+#stock-navbar ion-header-bar{
+  border: none;
+}
+
+#stock-navbar .back-text {
+  font-size: 11pt;
+}
+
+
+
+
+/* Stock Subheader Bar */
+
+#stock-subheader-bar {
+  border-top: none;
+}
+
+#stock-name {
+  color: #333;
+  float: left;
+  font-size: 3.5vmin;
+  font-weight: normal;
+  margin: auto 0;
+  max-width: 33vw;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+}
+
+#stock-price {
+  font-size: 7vmin;
+  line-height: 32pt;
+}
+
+#stock-change {
+  font-size: 4vmin;
+  font-weight: bolder;
+  float: right;
+  line-height: 12pt;
+  margin: auto 0;
+}
+
+
+
+
+/* Short Button Bar */
+
+#short-button-bar .button {
+  line-height: normal;
+  min-height: 10px;
+  border: none;
+  border-radius: 0;
+  font-size: 9pt;
+  background-color: #fff;
+}
+
+#short-button-bar .button.active {
+  font-weight: bold;
+}
+
+#short-button-bar {
+  -webkit-box-shadow: 0px 0px 0px 1px #ddd;
+}
+
+
+
+
+
+/* Chart Styles */
+
+#interactiveChart {
+  height: 80vmin;
+}
+
+.nv-focus .nv-barsWrap,
+.nv-focus .nv-y1 .tick,
+.nv-focus .nv-y1 .nv-axisMaxMin,
+.nv-focus .nv-y1 .domain,
+.nv-context .nv-x .nv-axisMaxMin,
+.nv-context .nv-y2 .domain,
+.nv-context .nv-y2 .nv-axisMaxMin,
+.nv-context .nv-y2 .tick {
+  display: none !important;
+}
+
+.nv-focus .nv-x .tick:first-of-type text,
+#interactiveChart text.nv-axislabel {
+  text-anchor: start !important;
+}
+
+.nv-focus .nv-y2 .tick text,
+.nv-focus .nv-y2 .nv-axisMaxMin text,
+.nv-focus .nv-x .tick:last-of-type text,
+.nv-context .nv-y1 .tick text,
+.nv-context .nv-y1 .nv-axisMaxMin text {
+  text-anchor: end !important;
+}
+
+#interactiveChart svg text {
+  font-size: 3vmin !important;
+}
+
+#interactiveChart .nv-axis line {
+  stroke-dasharray: 3,3;
+  stroke: #ddd;
+}
+
+#interactiveChart .nv-axis path.domain {
+  stroke-dasharray: 4,4;
+  stroke-opacity: .5;
+  stroke-width: 1px;
+}
+
+#interactiveChart .nv-focus .domain {
+  stroke: #1e88e5;
+}
+
+#interactiveChart .nv-focus .nv-axislabel,
+#interactiveChart .nv-focus .nv-axisMaxMin text {
+  fill: #1e88e5;
+}
+
+#interactiveChart .nv-context .domain {
+  stroke: #ff9800;
+}
+
+#interactiveChart .nv-context .nv-axislabel,
+#interactiveChart .nv-context .nv-axisMaxMin text {
+  fill: #ff9800;
+}
+
+#interactiveChart .nv-focus .nv-y2 .tick text,
+#interactiveChart .nv-context .nv-y1 .tick text {
+  fill: #ccc;
+}
+
+#interactiveChart .nv-focus .nv-line {
+  stroke: #2196f3;
+  stroke-width: 2px;
+}
+
+#interactiveChart .nv-context .nv-line {
+  stroke: #aaa;
+  stroke-opacity: .75;
+  stroke-width: 1px;
+}
+
+#interactiveChart .nv-line {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#interactiveChart .nv-barsWrap rect {
+  fill: #ff9800;
+  fill-opacity: 1;
+  shape-rendering: crispEdges;
+}
+
+#interactiveChart .nv-brushBackground rect {
+  shape-rendering: crispEdges;
+  stroke-width: 1;
+  stroke: #ccc;
+}
+
+
+
+
+/* Helper Styles */
+
+.display-flex {
+  display: flex !important;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+.margin-auto,
+.margin-auto svg {
+  margin: auto !important;
+}
+
+.text-align-center {
+  text-align: center !important;
+}
+
+.text-uppercase {
+  text-transform: uppercase !important;
+}
+
+.text-capitalize {
+  text-transform: capitalize !important;
+}
+
+.font-normal {
+  font-weight: normal !important;
+}
+
+.border-none {
+  border: none !important;
+}
+
+.padding-5,
+.padding-5 a {
+  padding: 5px !important;
+}
+
+.color-assertive {
+  color: #ef473a !important;
+}
+
+.background-assertive {
+  background-color: #ef473a !important;
+}
+
+.background-balanced {
+  background-color: #33cd5f !important;
+}
+
+
+
+
+/* Adjustment Styles */
+
+svg text {
+  font: 400 10pt "Helvetica Neue", sans-serif !important;
+}
