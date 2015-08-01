@@ -4,29 +4,94 @@
 
     <div class="buttons" side="left">
       <div class="button button-clear">
-        <h6>Company Name Inc.</h6>
+        <h6>{{stockDetailsData.Name}}</h6>
       </div>
     </div>
 
-    <h2 class="title button-left button-right">1000.5000</h2>
+    <h2 class="title button-left button-right">{{stockPriceData.price}}</h2>
 
     <div class="buttons" side="right">
       <div class="button button-clear">
-        <h6>+100.0000%</h6>
+        <h6>{{stockPriceData.chg_percent}}%</h6>
       </div>
     </div>
 
   </div>
 
+
   <ion-content class="has-subheader">
 
-    <div class="card">
-      <div class="item item-divider">Market Data</div>
-      <div class="row row-center">
-        <div class="col">Data: </div>
-        <div class="col">1000.5000</div>
-      </div>
+    <div class="button-bar">
+      <a ng-click="chartViewFunc(1)" ng-class="chartView == 1 ? 'active' : ''" class="button">Day</a>
+      <a ng-click="chartViewFunc(2)" ng-class="chartView == 2 ? 'active' : ''" class="button">Week</a>
+      <a ng-click="chartViewFunc(3)" ng-class="chartView == 3 ? 'active' : ''" class="button">3m</a>
+      <a ng-click="chartViewFunc(4)" ng-class="chartView == 4 ? 'active' : ''" class="button">Year</a>
+      <a ng-click="chartViewFunc(5)" ng-class="chartView == 5 ? 'active' : ''" class="button">Max</a>
     </div>
+
+    <!-- Yahoo Charts — go here for options https://code.google.com/p/support/wiki/ReadOnlyTransition -->
+    <img ng-if="chartView == 1" ng-src="http://chart.finance.yahoo.com/z?s={{ticker}}&t=1d&q=l&l=on&z=m&a=vm" style="width: 100%;">
+    <img ng-if="chartView == 2" ng-src="http://chart.finance.yahoo.com/z?s={{ticker}}&t=5d&q=l&l=on&z=m&a=vm" style="width: 100%;">
+    <img ng-if="chartView == 3" ng-src="http://chart.finance.yahoo.com/z?s={{ticker}}&t=3m&q=l&l=on&z=m&a=vm" style="width: 100%;">
+    <img ng-if="chartView == 4" ng-src="http://chart.finance.yahoo.com/z?s={{ticker}}&t=1y&q=l&l=on&z=m&a=vm" style="width: 100%;">
+    <img ng-if="chartView == 5" ng-src="http://chart.finance.yahoo.com/z?s={{ticker}}&t=my&q=l&l=on&z=m&a=vm" style="width: 100%;">
+
+
+    <div class="card">
+
+      <div class="item item-divider">Market Data</div>
+
+      <div class="row row-center">
+        <div class="col">Ask: </div>
+        <div class="col">{{stockDetailsData.Ask}}</div>
+        <div class="col">Bid: </div>
+        <div class="col">{{stockDetailsData.Bid}}</div>
+      </div>
+
+      <div class="row row-center">
+        <div class="col">Prev. Close: </div>
+        <div class="col">{{stockDetailsData.PreviousClose}}</div>
+        <div class="col">Open: </div>
+        <div class="col">{{stockDetailsData.Open}}</div>
+      </div>
+
+      <div class="row row-center">
+        <div class="col">Day's High: </div>
+        <div class="col">{{stockPriceData.day_high}}</div>
+        <div class="col">Day's Low: </div>
+        <div class="col">{{stockPriceData.day_low}}</div>
+      </div>
+
+      <div class="row row-center">
+        <div class="col">52w High: </div>
+        <div class="col">{{stockDetailsData.YearHigh}}</div>
+        <div class="col">52w Low: </div>
+        <div class="col">{{stockDetailsData.YearLow}}</div>
+      </div>
+
+      <div class="row row-center">
+        <div class="col">Volume: </div>
+        <div class="col">{{stockPriceData.volume}}</div>
+        <div class="col">Avg. Volume: </div>
+        <div class="col">{{stockDetailsData.AverageDailyVolume}}</div>
+      </div>
+
+      <div class="row row-center">
+        <div class="col">Market Cap: </div>
+        <div class="col">{{stockDetailsData.MarketCapitalization}}</div>
+        <div class="col">EBITDA: </div>
+        <div class="col">{{stockDetailsData.EBITDA}}</div>
+      </div>
+
+      <div class="row row-center">
+        <div class="col">P/E: </div>
+        <div class="col">{{stockDetailsData.PERatio}}</div>
+        <div class="col">EPS: </div>
+        <div class="col">{{stockDetailsData.EarningsShare}}</div>
+      </div>
+
+    </div>
+
 
     <div class="card">
       <div class="item item-divider">Notes</div>
@@ -34,6 +99,7 @@
         <h2>Note Title</h2>
       </a>
     </div>
+
 
     <div class="card">
       <div class="item item-divider">News</div>
