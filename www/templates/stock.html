@@ -98,10 +98,11 @@
     </div>
 
 
-    <div class="card">
-      <div class="item item-divider">Notes</div>
-      <a class="item">
-        <h2>Note Title</h2>
+    <div class="card" id="stock-notes">
+      <div class="item item-divider">Notes <span ng-click="addNote()" class="add-stock-note">Add <i class="icon ion-ios-plus"></i></span></div>
+      <a class="item" ng-repeat="note in stockNotes track by $index" ng-click="openNote($index, note.title, note.body)">
+        <h2>{{note.title}}</h2>
+        <h6>{{note.date | date:'M/d/yy'}}</h6>
       </a>
     </div>
 
