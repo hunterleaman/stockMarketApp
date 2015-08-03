@@ -1,4 +1,47 @@
 
+/* My Stocks */
+
+#my-stocks .item-content {
+  padding: 5px 0px 5px 5px;
+}
+
+#my-stocks h3 {
+  font-size: 4.75vmin;
+}
+
+#my-stocks h6 {
+  font-size: 3vmin;
+  font-weight: 300;
+}
+
+#my-stocks .stock-price-time {
+  padding-right: 10px;
+  text-align: right;
+}
+
+#my-stocks .stock-price-time h3 {
+  font-weight: normal;
+}
+
+#my-stocks .stock-change {
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+  margin-right: -10px;
+}
+
+#my-stocks .stock-change h3,
+#my-stocks .stock-change h6 {
+  color: #fff;
+}
+
+#my-stocks .inset-shadow {
+  -webkit-box-shadow: inset 0px 0px 15px rgba(0, 0, 0, .15);
+}
+
+
+
+
+
 /* Search */
 
 #search {
@@ -268,8 +311,20 @@
 
 /* Helper Styles  */
 
+.background-red {
+  background-color: #ef473a !important;
+}
+
+.background-green {
+  background-color: #33cd5f !important;
+}
+
 .border-none {
   border: none !important;
+}
+
+.color-red {
+  color: #ef473a !important;
 }
 
 .display-flex {

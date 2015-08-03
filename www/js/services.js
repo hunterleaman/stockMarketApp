@@ -118,6 +118,26 @@ angular.module('yourAppsName.services', [])
 
 
 
+.factory('stockPriceCacheService', function(CacheFactory) {
+
+  var stockPriceCache;
+
+  if(!CacheFactory.get('stockPriceCache')) {
+    stockPriceCache = CacheFactory('stockPriceCache', {
+      maxAge: 5 * 1000,
+      deleteOnExpire: 'aggressive',
+      storageMode: 'localStorage'
+    });
+  }
+  else {
+    stockPriceCache = CacheFactory.get('stockPriceCache');
+  }
+
+  return stockPriceCache;
+})
+
+
+
 .factory('notesCacheService', function(CacheFactory) {
 
   var notesCache;
@@ -239,7 +259,7 @@ angular.module('yourAppsName.services', [])
 
 
 
-.factory('stockDataService', function($q, $http, encodeURIService, stockDetailsCacheService) {
+.factory('stockDataService', function($q, $http, encodeURIService, stockDetailsCacheService, stockPriceCacheService) {
 
   var getDetailsData = function(ticker) {
 
@@ -273,11 +293,15 @@ angular.module('yourAppsName.services', [])
   var getPriceData = function(ticker) {
 
     var deferred = $q.defer(),
+
+    cacheKey = ticker,
+
     url = "http://finance.yahoo.com/webservice/v1/symbols/" + ticker + "/quote?format=json&view=detail";
 
     $http.get(url)
       .success(function(json) {
         var jsonData = json.list.resources[0].resource.fields;
+        stockPriceCacheService.put(cacheKey, jsonData);
         deferred.resolve(jsonData);
       })
       .error(function(error) {
