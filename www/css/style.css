@@ -1,1 +1,215 @@
-/* Empty. Add your own CSS if you like */
+
+/* Market data card  */
+
+#market-data-card {
+  font-size: 3.25vmin;
+}
+
+#market-data-card .col-20 {
+  font-weight: bolder;
+}
+
+#market-data-card .col-20:last-of-type {
+  text-align: right;
+}
+
+#market-data-card .last-trade {
+  font-size: 3vmin;
+  float: right;
+}
+
+
+
+
+
+/* Stock navbar  */
+
+#stock-navbar ion-header-bar {
+  border: none;
+}
+
+#stock-navbar .back-text {
+  font-size: 11pt;
+}
+
+
+
+
+
+/* Stock subheader bar  */
+
+#stock-subheader-bar {
+  border-top: none;
+}
+
+#stock-name {
+  color: #333;
+  float: left;
+  font-size: 3.5vmin;
+  font-weight: normal;
+  margin: auto 0;
+  max-width: 33vw;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+}
+
+#stock-price {
+  font-size: 7vmin;
+  line-height: 32pt;
+}
+
+#stock-change {
+  font-size: 4vmin;
+  font-weight: bolder;
+  float: right;
+  line-height: 12pt;
+  margin: auto 0;
+}
+
+
+
+
+
+/* Short button bar  */
+
+#short-button-bar .button {
+  background-color: #fff;
+  border: none;
+  border-radius: 0;
+  font-size: 9pt;
+  line-height: normal;
+  min-height: 10px;
+}
+
+#short-button-bar .button.active {
+  font-weight: bold;
+}
+
+#short-button-bar {
+  -webkit-box-shadow: 0px 0px 0px 1px #ddd;
+}
+
+
+
+
+
+/* Chart Styles  */
+
+#interactiveChart {
+  height: 80vmin;
+}
+
+.nv-focus .nv-barsWrap, /* top chart volume bars */
+.nv-focus .nv-y1 .tick, /* top chart left y axis lines bars */
+.nv-focus .nv-y1 .nv-axisMaxMin, /* top chart left y axis max/min values */
+.nv-focus .nv-y1 .domain, /* top chart left y axis bounding box */
+.nv-context .nv-x .nv-axisMaxMin, /* bottom chart */
+.nv-context .nv-y2 .domain,
+.nv-context .nv-y2 .nv-axisMaxMin,
+.nv-context .nv-y2 .tick {
+  display: none !important;
+}
+
+.nv-focus .nv-x .tick:first-of-type text,
+#interactiveChart text.nv-axislabel {
+  text-anchor: start !important;
+}
+
+.nv-focus .nv-y2 .tick text,
+.nv-focus .nv-y2 .nv-axisMaxMin text,
+.nv-focus .nv-x .tick:last-of-type text,
+.nv-context .nv-y1 .tick text,
+.nv-context .nv-y1 .nv-axisMaxMin text {
+  text-anchor: end !important;
+}
+
+#interactiveChart svg text {
+  font-size: 3vmin !important;
+}
+
+#interactiveChart .nv-axis line /* interior grid */ {
+  stroke-dasharray: 3,3;
+  stroke: #ddd;
+}
+
+#interactiveChart .nv-axis path.domain /* both charts' bounding boxes */ {
+  stroke-dasharray: 4,4;
+  stroke-opacity: .5;
+  stroke-width: 1px;
+}
+
+#interactiveChart .nv-focus .domain /* top chart bounding box color */ {
+  stroke: #1e88e5;
+}
+
+#interactiveChart .nv-focus .nv-axislabel,
+#interactiveChart .nv-focus .nv-axisMaxMin text /* top chart label and max/min values colors */ {
+  fill: #1e88e5;
+}
+
+#interactiveChart .nv-context .domain /* bottom chart */ {
+  stroke: #ff9800;
+}
+
+#interactiveChart .nv-context .nv-axislabel,
+#interactiveChart .nv-context .nv-axisMaxMin text {
+  fill: #ff9800;
+}
+
+#interactiveChart .nv-focus .nv-y2 .tick text,
+#interactiveChart .nv-context .nv-y1 .tick text /* both charts' y axis interior range values colors */ {
+  fill: #ccc;
+}
+
+#interactiveChart .nv-focus .nv-line /* top chart price line */ {
+  stroke: #2196f3;
+  stroke-width: 2px;
+}
+
+#interactiveChart .nv-context .nv-line /* bottom chart price line */ {
+  stroke: #aaa;
+  stroke-opacity: .75;
+  stroke-width: 1px;
+}
+
+#interactiveChart .nv-line {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#interactiveChart .nv-barsWrap rect /* bottom chart volume bars */ {
+  fill: #ff9800;
+  fill-opacity: 1;
+  shape-rendering: crispEdges;
+}
+
+#interactiveChart .nv-brushBackground rect /* context chart range scroller */ {
+  shape-rendering: crispEdges;
+  stroke-width: 1;
+  stroke: #ccc;
+}
+
+
+
+
+
+/* Helper Styles  */
+
+.display-flex {
+  display: flex !important;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+
+
+
+
+/* Adjustment Styles  */
+
+svg text {
+  font: 400 10pt "Helvetica Neue", sans-serif !important;
+}
