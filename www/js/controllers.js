@@ -44,34 +44,22 @@ angular.module('yourAppsName.controllers', [])
 
 
 
-.controller('MyStocksCtrl', ['$scope',
-  function($scope) {
+.controller('MyStocksCtrl', ['$scope', 'myStocksArrayService',
+  function($scope, myStocksArrayService) {
 
-    $scope.myStocksArray = [
-      {ticker: "AAPL"},
-      {ticker: "GPRO"},
-      {ticker: "FB"},
-      {ticker: "NFLX"},
-      {ticker: "TSLA"},
-      {ticker: "BRK-A"},
-      {ticker: "INTC"},
-      {ticker: "MSFT"},
-      {ticker: "GE"},
-      {ticker: "BAC"},
-      {ticker: "C"},
-      {ticker: "T"}
-    ];
+    $scope.myStocksArray = myStocksArrayService;
 
 }])
 
 
 
-.controller('StockCtrl', ['$scope', '$stateParams', '$window', '$ionicPopup', 'stockDataService', 'chartDataService', 'dateService', 'notesService', 'newsService',
-  function($scope, $stateParams, $window, $ionicPopup, stockDataService, chartDataService, dateService, notesService, newsService) {
+.controller('StockCtrl', ['$scope', '$stateParams', '$window', '$ionicPopup', 'followStockService', 'stockDataService', 'chartDataService', 'dateService', 'notesService', 'newsService',
+  function($scope, $stateParams, $window, $ionicPopup, followStockService, stockDataService, chartDataService, dateService, notesService, newsService) {
 
     $scope.ticker = $stateParams.stockTicker;
     $scope.stockNotes = [];
 
+    $scope.following = followStockService.checkFollowing($scope.ticker);
     $scope.oneYearAgoDate = dateService.oneYearAgoDate();
     $scope.todayDate = dateService.currentDate();
 
@@ -90,6 +78,17 @@ angular.module('yourAppsName.controllers', [])
 
     $scope.chartViewFunc = function(n) {
       $scope.chartView = n;
+    };
+
+    $scope.toggleFollow = function() {
+      if($scope.following) {
+        followStockService.unfollow($scope.ticker);
+        $scope.following = false;
+      }
+      else {
+        followStockService.follow($scope.ticker);
+        $scope.following = true;
+      }
     };
 
     $scope.openWindow = function(link) {
@@ -173,10 +172,10 @@ angular.module('yourAppsName.controllers', [])
         $scope.stockPriceData = data;
 
         if(data.chg_percent >= 0 && data !== null) {
-          $scope.reactiveColor = {'background-color': '#33cd5f'};
+          $scope.reactiveColor = {'background-color': '#33cd5f', 'border-color': 'rgba(255,255,255,.3)'};
         }
         else if(data.chg_percent < 0 && data !== null) {
-          $scope.reactiveColor = {'background-color' : '#ef473a'};
+          $scope.reactiveColor = {'background-color' : '#ef473a', 'border-color': 'rgba(0,0,0,.2)'};
         }
       });
     }

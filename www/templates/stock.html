@@ -4,6 +4,10 @@
     <ion-nav-back-button></ion-nav-back-button>
   </ion-nav-bar>
 
+  <ion-nav-buttons side="right">
+    <button class="button icon-left ng-style:reactiveColor" ng-class="following ? 'ion-ios-checkmark-empty' : 'ion-ios-plus'" ng-bind="following ? 'Following ' : 'Follow '" ng-click="toggleFollow()"></button>
+  </ion-nav-buttons>
+
   <div class="bar bar-subheader bar-light">
 
     <div class="buttons" side="left">
