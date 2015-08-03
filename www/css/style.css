@@ -1,4 +1,32 @@
 
+/* News card */
+
+#stock-news .icon {
+  color: #ccc;
+  font-size: 11pt;
+  right: 0;
+}
+
+#stock-news h2 {
+  font-weight: 400;
+  white-space: normal;
+}
+
+#stock-news p {
+  color: #222;
+  font-size: 9pt;
+  margin: 10px auto 0;
+  white-space: normal;
+}
+
+#stock-news .item-icon-right {
+  padding-right: 30px;
+}
+
+
+
+
+
 /* Notes card  */
 
 #stock-notes .add-stock-note {

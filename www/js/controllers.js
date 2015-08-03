@@ -66,8 +66,8 @@ angular.module('yourAppsName.controllers', [])
 
 
 
-.controller('StockCtrl', ['$scope', '$stateParams', '$window', '$ionicPopup', 'stockDataService', 'chartDataService', 'dateService', 'notesService',
-  function($scope, $stateParams, $window, $ionicPopup, stockDataService, chartDataService, dateService, notesService) {
+.controller('StockCtrl', ['$scope', '$stateParams', '$window', '$ionicPopup', 'stockDataService', 'chartDataService', 'dateService', 'notesService', 'newsService',
+  function($scope, $stateParams, $window, $ionicPopup, stockDataService, chartDataService, dateService, notesService, newsService) {
 
     $scope.ticker = $stateParams.stockTicker;
     $scope.stockNotes = [];
@@ -83,12 +83,18 @@ angular.module('yourAppsName.controllers', [])
       getPriceData();
       getDetailsData();
       getChartData();
+      getNews();
       $scope.stockNotes = notesService.getNotes($scope.ticker);
     });
 
 
     $scope.chartViewFunc = function(n) {
       $scope.chartView = n;
+    };
+
+    $scope.openWindow = function(link) {
+      //TODO install and set up inAppBrowser
+      console.log("openWindow –> " + link);
     };
 
     $scope.addNote = function() {
@@ -195,6 +201,17 @@ angular.module('yourAppsName.controllers', [])
         		series.values = series.values.map(function(d) { return {x: d[0], y: d[1] }; });
         		return series;
         	});
+      });
+    }
+
+    function getNews() {
+
+      $scope.newsStories = [];
+
+      var promise = newsService.getNews($scope.ticker);
+
+      promise.then(function(data) {
+        $scope.newsStories = data;
       });
     }
 
