@@ -8,11 +8,11 @@
       </div>
     </div>
 
-    <h2 class="title button-left button-right">{{stockPriceData.price}}</h2>
+    <h2 class="title button-left button-right">{{stockPriceData.price | shrinkNumber:2}}</h2>
 
     <div class="buttons" side="right">
       <div class="button button-clear">
-        <h6>{{stockPriceData.chg_percent}}%</h6>
+        <h6>{{stockPriceData.chg_percent | number:3}}%</h6>
       </div>
     </div>
 
@@ -43,37 +43,37 @@
 
       <div class="row row-center">
         <div class="col">Ask: </div>
-        <div class="col">{{stockDetailsData.Ask}}</div>
+        <div class="col">{{stockDetailsData.Ask | shrinkNumber: 2}}</div>
         <div class="col">Bid: </div>
-        <div class="col">{{stockDetailsData.Bid}}</div>
+        <div class="col">{{stockDetailsData.Bid | shrinkNumber: 2}}</div>
       </div>
 
       <div class="row row-center">
         <div class="col">Prev. Close: </div>
-        <div class="col">{{stockDetailsData.PreviousClose}}</div>
+        <div class="col">{{stockDetailsData.PreviousClose | shrinkNumber: 2}}</div>
         <div class="col">Open: </div>
-        <div class="col">{{stockDetailsData.Open}}</div>
+        <div class="col">{{stockDetailsData.Open | shrinkNumber: 2}}</div>
       </div>
 
       <div class="row row-center">
         <div class="col">Day's High: </div>
-        <div class="col">{{stockPriceData.day_high}}</div>
+        <div class="col">{{stockPriceData.day_high | shrinkNumber: 2}}</div>
         <div class="col">Day's Low: </div>
-        <div class="col">{{stockPriceData.day_low}}</div>
+        <div class="col">{{stockPriceData.day_low | shrinkNumber: 2}}</div>
       </div>
 
       <div class="row row-center">
         <div class="col">52w High: </div>
-        <div class="col">{{stockDetailsData.YearHigh}}</div>
+        <div class="col">{{stockDetailsData.YearHigh | shrinkNumber: 2}}</div>
         <div class="col">52w Low: </div>
-        <div class="col">{{stockDetailsData.YearLow}}</div>
+        <div class="col">{{stockDetailsData.YearLow | shrinkNumber: 2}}</div>
       </div>
 
       <div class="row row-center">
         <div class="col">Volume: </div>
-        <div class="col">{{stockPriceData.volume}}</div>
+        <div class="col">{{stockPriceData.volume | shrinkNumber: 2}}</div>
         <div class="col">Avg. Volume: </div>
-        <div class="col">{{stockDetailsData.AverageDailyVolume}}</div>
+        <div class="col">{{stockDetailsData.AverageDailyVolume | shrinkNumber: 2}}</div>
       </div>
 
       <div class="row row-center">
@@ -85,9 +85,9 @@
 
       <div class="row row-center">
         <div class="col">P/E: </div>
-        <div class="col">{{stockDetailsData.PERatio}}</div>
+        <div class="col">{{stockDetailsData.PERatio | shrinkNumber: 2}}</div>
         <div class="col">EPS: </div>
-        <div class="col">{{stockDetailsData.EarningsShare}}</div>
+        <div class="col">{{stockDetailsData.EarningsShare | shrinkNumber: 2}}</div>
       </div>
 
     </div>
