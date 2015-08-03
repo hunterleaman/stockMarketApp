@@ -1,6 +1,10 @@
 angular.module('yourAppsName.services', [])
 
 
+.constant('FIREBASE_URL', 'https://stockmarketapp-pre.firebaseio.com/')
+
+
+
 .service('modalService', function($ionicModal) {
 
   this.openModal = function(id) {
@@ -18,16 +22,20 @@ angular.module('yourAppsName.services', [])
     }
     else if(id == 2) {
       $ionicModal.fromTemplateUrl('templates/login.html', {
-        scope: $scope
+        scope: null,
+        controller: 'LoginSearchCtrl'
       }).then(function(modal) {
-        $scope.modal = modal;
+        _this.modal = modal;
+        _this.modal.show();
       });
     }
     else if(id == 3) {
-      $ionicModal.fromTemplateUrl('templates/login.html', {
-        scope: $scope
+      $ionicModal.fromTemplateUrl('templates/signup.html', {
+        scope: null,
+        controller: 'LoginSearchCtrl'
       }).then(function(modal) {
-        $scope.modal = modal;
+        _this.modal = modal;
+        _this.modal.show();
       });
     }
   };
@@ -72,6 +80,70 @@ angular.module('yourAppsName.services', [])
   return {
     currentDate: currentDate,
     oneYearAgoDate: oneYearAgoDate
+  };
+})
+
+
+
+.factory('firebaseRef', function($firebase, FIREBASE_URL) {
+
+  var firebaseRef = new Firebase(FIREBASE_URL);
+
+  return firebaseRef;
+})
+
+
+
+.factory('userService', function($rootScope, firebaseRef, modalService) {
+
+  var login = function(user) {
+
+    firebaseRef.authWithPassword({
+      email    : user.email,
+      password : user.password
+    }, function(error, authData) {
+      if (error) {
+        console.log("Login Failed!", error);
+      }
+      else {
+        $rootScope.currentUser = user;
+        modalService.closeModal();
+      }
+    });
+  };
+
+  var signup = function(user) {
+
+    firebaseRef.createUser({
+      email    : user.email,
+      password : user.password
+    }, function(error, userData) {
+      if (error) {
+        console.log("Error creating user:", error);
+      }
+      else {
+        login(user);
+      }
+    });
+  };
+
+  var logout = function() {
+    firebaseRef.unauth();
+    $rootScope.currentUser = '';
+  };
+
+  var getUser = function() {
+    return firebaseRef.getAuth();
+  };
+
+  if(getUser()) {
+    $rootScope.currentUser = getUser();
+  }
+
+  return {
+    login: login,
+    signup: signup,
+    logout: logout
   };
 })
 

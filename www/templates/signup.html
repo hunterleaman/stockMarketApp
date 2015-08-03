@@ -1,14 +1,14 @@
 <ion-modal-view ng-controller="LoginSignupCtrl">
 
   <ion-header-bar>
-    <h1 class="title">Log In</h1>
+    <h1 class="title">Sign Up</h1>
     <div class="buttons">
       <button class="button button-clear" ng-click="closeModal()">Close</button>
     </div>
   </ion-header-bar>
 
   <ion-content>
-    <form ng-submit="login(user)">
+    <form ng-submit="signup(user)">
       <div class="list">
         <label class="item item-input item-floating-label">
           <span class="input-label">Email</span>
@@ -19,7 +19,7 @@
           <input type="password" placeholder=" Password" ng-model="user.password">
         </label>
         <label class="item">
-          <button class="button button-block button-positive" type="submit">Log in</button>
+          <button class="button button-block button-positive" type="submit">Sign up</button>
         </label>
       </div>
     </form>

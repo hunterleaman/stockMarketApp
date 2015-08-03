@@ -1,5 +1,6 @@
 angular.module('yourAppsName', [
   'ionic',
+  'firebase',
   'angular-cache',
   'nvd3',
   'nvChart',
