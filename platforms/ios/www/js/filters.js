@@ -3,13 +3,12 @@ angular.module('yourAppsName.filters', [])
 
 .filter('characters', function () {
   return function (input, chars, breakOnWord, ellipsis) {
-
     if (isNaN(chars)) return input;
     if (chars <= 0) return '';
     if (input && input.length > chars) {
       input = input.substring(0, chars);
 
-      if(!breakOnWord) {
+      if (!breakOnWord) {
         var lastspace = input.lastIndexOf(' ');
         //get last space
         if (lastspace !== -1) {
@@ -30,12 +29,14 @@ angular.module('yourAppsName.filters', [])
 })
 
 
+
 .filter("shrinkNumber", function($filter) {
   return function(number, fractionSize) {
 
     if(number === null) return null;
     if(number === 0) return "0";
 
+    // default number of decimals for values >1000 or <-1000 if not set in view
     if(!fractionSize || fractionSize < 0)
         fractionSize = 1;
 

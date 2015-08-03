@@ -30,13 +30,14 @@
 }
 
 #my-stocks .stock-change h3,
-#my-stocks .stock-change h6  {
+#my-stocks .stock-change h6 {
   color: #fff;
 }
 
 #my-stocks .inset-shadow {
-  -webkit-box-shadow: inset 0px 0px 15px rgba(0,0,0,.15);
+  -webkit-box-shadow: inset 0px 0px 15px rgba(0, 0, 0, .15);
 }
+
 
 
 
@@ -48,7 +49,7 @@
 }
 
 #search .search-input {
-  background-color: rgba(255,255,255,.1);
+  background-color: rgba(255, 255, 255,.1);
 }
 
 #search input {
@@ -59,11 +60,11 @@
 
 
 
-/* News Card */
+/* News card */
 
 #stock-news .icon {
   color: #ccc;
-  font-size: 14pt;
+  font-size: 11pt;
   right: 0;
 }
 
@@ -86,7 +87,8 @@
 
 
 
-/* Notes Card */
+
+/* Notes card  */
 
 #stock-notes .add-stock-note {
   border: 1px solid #ff9800;
@@ -111,7 +113,8 @@
 
 
 
-/* Market Data Card */
+
+/* Market data card  */
 
 #market-data-card {
   font-size: 3.25vmin;
@@ -133,9 +136,10 @@
 
 
 
-/* Stock Navbar */
 
-#stock-navbar ion-header-bar{
+/* Stock navbar  */
+
+#stock-navbar ion-header-bar {
   border: none;
 }
 
@@ -146,7 +150,8 @@
 
 
 
-/* Stock Subheader Bar */
+
+/* Stock subheader bar  */
 
 #stock-subheader-bar {
   border-top: none;
@@ -180,15 +185,16 @@
 
 
 
-/* Short Button Bar */
+
+/* Short button bar  */
 
 #short-button-bar .button {
-  line-height: normal;
-  min-height: 10px;
+  background-color: #fff;
   border: none;
   border-radius: 0;
   font-size: 9pt;
-  background-color: #fff;
+  line-height: normal;
+  min-height: 10px;
 }
 
 #short-button-bar .button.active {
@@ -196,24 +202,24 @@
 }
 
 #short-button-bar {
-  -webkit-box-shadow: 0px 0px 0px 1px #ddd;
+  border-bottom: 1px solid #eee;
 }
 
 
 
 
 
-/* Chart Styles */
+/* Chart Styles  */
 
 #interactiveChart {
   height: 80vmin;
 }
 
-.nv-focus .nv-barsWrap,
-.nv-focus .nv-y1 .tick,
-.nv-focus .nv-y1 .nv-axisMaxMin,
-.nv-focus .nv-y1 .domain,
-.nv-context .nv-x .nv-axisMaxMin,
+.nv-focus .nv-barsWrap, /* top chart volume bars */
+.nv-focus .nv-y1 .tick, /* top chart left y axis lines bars */
+.nv-focus .nv-y1 .nv-axisMaxMin, /* top chart left y axis max/min values */
+.nv-focus .nv-y1 .domain, /* top chart left y axis bounding box */
+.nv-context .nv-x .nv-axisMaxMin, /* bottom chart */
 .nv-context .nv-y2 .domain,
 .nv-context .nv-y2 .nv-axisMaxMin,
 .nv-context .nv-y2 .tick {
@@ -237,27 +243,27 @@
   font-size: 3vmin !important;
 }
 
-#interactiveChart .nv-axis line {
+#interactiveChart .nv-axis line /* interior grid */ {
   stroke-dasharray: 3,3;
   stroke: #ddd;
 }
 
-#interactiveChart .nv-axis path.domain {
+#interactiveChart .nv-axis path.domain /* both charts' bounding boxes */ {
   stroke-dasharray: 4,4;
   stroke-opacity: .5;
   stroke-width: 1px;
 }
 
-#interactiveChart .nv-focus .domain {
+#interactiveChart .nv-focus .domain /* top chart bounding box color */ {
   stroke: #1e88e5;
 }
 
 #interactiveChart .nv-focus .nv-axislabel,
-#interactiveChart .nv-focus .nv-axisMaxMin text {
+#interactiveChart .nv-focus .nv-axisMaxMin text /* top chart label and max/min values colors */ {
   fill: #1e88e5;
 }
 
-#interactiveChart .nv-context .domain {
+#interactiveChart .nv-context .domain /* bottom chart */ {
   stroke: #ff9800;
 }
 
@@ -267,16 +273,16 @@
 }
 
 #interactiveChart .nv-focus .nv-y2 .tick text,
-#interactiveChart .nv-context .nv-y1 .tick text {
+#interactiveChart .nv-context .nv-y1 .tick text /* both charts' y axis interior range values colors */ {
   fill: #ccc;
 }
 
-#interactiveChart .nv-focus .nv-line {
+#interactiveChart .nv-focus .nv-line /* top chart price line */ {
   stroke: #2196f3;
   stroke-width: 2px;
 }
 
-#interactiveChart .nv-context .nv-line {
+#interactiveChart .nv-context .nv-line /* bottom chart price line */ {
   stroke: #aaa;
   stroke-opacity: .75;
   stroke-width: 1px;
@@ -287,13 +293,13 @@
   stroke-linejoin: round;
 }
 
-#interactiveChart .nv-barsWrap rect {
+#interactiveChart .nv-barsWrap rect /* bottom chart volume bars */ {
   fill: #ff9800;
   fill-opacity: 1;
   shape-rendering: crispEdges;
 }
 
-#interactiveChart .nv-brushBackground rect {
+#interactiveChart .nv-brushBackground rect /* context chart range scroller */ {
   shape-rendering: crispEdges;
   stroke-width: 1;
   stroke: #ccc;
@@ -302,19 +308,40 @@
 
 
 
-/* Helper Styles */
 
-.display-flex {
-  display: flex !important;
+/* Helper Styles  */
+
+.background-red {
+  background-color: #ef473a !important;
 }
 
-.no-margin {
-  margin: 0 !important;
+.background-green {
+  background-color: #33cd5f !important;
+}
+
+.border-none {
+  border: none !important;
+}
+
+.color-red {
+  color: #ef473a !important;
+}
+
+.display-flex {
+  display: -webkit-flex !important;
+}
+
+.font-normal {
+  font-weight: normal !important;
 }
 
 .margin-auto,
 .margin-auto svg {
   margin: auto !important;
+}
+
+.no-margin {
+  margin: 0 !important;
 }
 
 .text-align-center {
@@ -329,35 +356,11 @@
   text-transform: capitalize !important;
 }
 
-.font-normal {
-  font-weight: normal !important;
-}
-
-.border-none {
-  border: none !important;
-}
-
-.padding-5,
-.padding-5 a {
-  padding: 5px !important;
-}
-
-.color-assertive {
-  color: #ef473a !important;
-}
-
-.background-assertive {
-  background-color: #ef473a !important;
-}
-
-.background-balanced {
-  background-color: #33cd5f !important;
-}
 
 
 
 
-/* Adjustment Styles */
+/* Adjustment Styles  */
 
 svg text {
   font: 400 10pt "Helvetica Neue", sans-serif !important;

@@ -1,5 +1,6 @@
 angular.module('yourAppsName.controllers', [])
 
+
 .controller('AppCtrl', ['$scope', 'modalService', 'userService',
   function($scope, modalService, userService) {
 
@@ -12,15 +13,12 @@ angular.module('yourAppsName.controllers', [])
 }])
 
 
+
 .controller('MyStocksCtrl', ['$scope', 'myStocksArrayService', 'stockDataService', 'stockPriceCacheService', 'followStockService',
   function($scope, myStocksArrayService, stockDataService, stockPriceCacheService, followStockService) {
 
-    $scope.$on('$ionicView.afterEnter', function() {
+    $scope.$on("$ionicView.afterEnter", function() {
       $scope.getMyStocksData();
-    });
-
-    stockPriceCacheService.setOptions({
-      maxAge: 60 * 1000
     });
 
     $scope.getMyStocksData = function() {
@@ -31,10 +29,9 @@ angular.module('yourAppsName.controllers', [])
 
         $scope.myStocksData = [];
 
-        promise
-          .then(function(data) {
-            $scope.myStocksData.push(stockPriceCacheService.get(data.symbol));
-          });
+        promise.then(function(data) {
+          $scope.myStocksData.push(stockPriceCacheService.get(data.symbol));
+        });
       });
 
       $scope.$broadcast('scroll.refreshComplete');
@@ -42,31 +39,38 @@ angular.module('yourAppsName.controllers', [])
 
     $scope.unfollowStock = function(ticker) {
       followStockService.unfollow(ticker);
-
       $scope.getMyStocksData();
     };
-
 }])
 
 
-.controller('StockCtrl', ['$scope', '$stateParams', '$window', '$ionicPopup', '$cordovaInAppBrowser', 'followStockService', 'dateService', 'stockDataService', 'chartDataService', 'notesService', 'newsService',
-  function($scope, $stateParams, $window, $ionicPopup, $cordovaInAppBrowser, followStockService, dateService, stockDataService, chartDataService, notesService, newsService) {
+
+.controller('StockCtrl', ['$scope', '$stateParams', '$window', '$ionicPopup', '$cordovaInAppBrowser', 'followStockService', 'stockDataService', 'chartDataService', 'dateService', 'notesService', 'newsService',
+  function($scope, $stateParams, $window, $ionicPopup, $cordovaInAppBrowser, followStockService, stockDataService, chartDataService, dateService, notesService, newsService) {
 
     $scope.ticker = $stateParams.stockTicker;
-    $scope.oneYearAgoDate = dateService.oneYearAgoDate();
-    $scope.todayDate = dateService.currentDate();
-    $scope.following = followStockService.checkFollowing($scope.ticker);
-
-    $scope.chartView = 4;
     $scope.stockNotes = [];
 
-    $scope.$on('$ionicView.afterEnter', function() {
+    $scope.following = followStockService.checkFollowing($scope.ticker);
+    $scope.oneYearAgoDate = dateService.oneYearAgoDate();
+    $scope.todayDate = dateService.currentDate();
+
+    // default chart setting
+    $scope.chartView = 4;
+
+
+    $scope.$on("$ionicView.afterEnter", function() {
       getPriceData();
       getDetailsData();
       getChartData();
       getNews();
       $scope.stockNotes = notesService.getNotes($scope.ticker);
     });
+
+
+    $scope.chartViewFunc = function(n) {
+      $scope.chartView = n;
+    };
 
     $scope.toggleFollow = function() {
       if($scope.following) {
@@ -89,12 +93,8 @@ angular.module('yourAppsName.controllers', [])
       $cordovaInAppBrowser.open(link, '_blank', inAppBrowserOptions);
     };
 
-    $scope.chartViewFunc = function(n) {
-      $scope.chartView = n;
-    };
-
     $scope.addNote = function() {
-      $scope.note = {title: 'Note', body: '', date: $scope.todayDate, ticker: $scope.ticker};  // add ; at beginnging                                           // ;
+      $scope.note = {title: 'Note', body: '', date: $scope.todayDate, ticker: $scope.ticker};
 
       var note = $ionicPopup.show({
         template: '<input type="text" ng-model="note.title" id="stock-note-title"><textarea type="text" ng-model="note.body" id="stock-note-body"></textarea>',
@@ -106,7 +106,7 @@ angular.module('yourAppsName.controllers', [])
             onTap: function(e) {
               return;
             }
-          },
+           },
           {
             text: '<b>Save</b>',
             type: 'button-balanced',
@@ -120,10 +120,10 @@ angular.module('yourAppsName.controllers', [])
       note.then(function(res) {
         $scope.stockNotes = notesService.getNotes($scope.ticker);
       });
-    };// dont delete this closing bracket
+    };
 
     $scope.openNote = function(index, title, body) {
-      $scope.note = {title: title, body: body, date: $scope.todayDate, ticker: $scope.ticker};  // add ; at beginnging                                           // ;
+      $scope.note = {title: title, body: body, date: $scope.todayDate, ticker: $scope.ticker};
 
       var note = $ionicPopup.show({
         template: '<input type="text" ng-model="note.title" id="stock-note-title"><textarea type="text" ng-model="note.body" id="stock-note-body"></textarea>',
@@ -143,7 +143,7 @@ angular.module('yourAppsName.controllers', [])
             onTap: function(e) {
               return;
             }
-          },
+           },
           {
             text: '<b>Save</b>',
             type: 'button-balanced button-small',
@@ -160,16 +160,6 @@ angular.module('yourAppsName.controllers', [])
       });
     };
 
-    function getNews() {
-
-      $scope.newsStories = [];
-
-      var promise = newsService.getNews($scope.ticker);
-
-      promise.then(function(data) {
-        $scope.newsStories = data;
-      });
-    }
 
     function getPriceData() {
 
@@ -182,7 +172,7 @@ angular.module('yourAppsName.controllers', [])
           $scope.reactiveColor = {'background-color': '#33cd5f', 'border-color': 'rgba(255,255,255,.3)'};
         }
         else if(data.chg_percent < 0 && data !== null) {
-          $scope.reactiveColor = {'background-color': '#ef473a', 'border-color': 'rgba(0,0,0,.2)'};
+          $scope.reactiveColor = {'background-color' : '#ef473a', 'border-color': 'rgba(0,0,0,.2)'};
         }
       });
     }
@@ -210,6 +200,20 @@ angular.module('yourAppsName.controllers', [])
       });
     }
 
+    function getNews() {
+
+      $scope.newsStories = [];
+
+      var promise = newsService.getNews($scope.ticker);
+
+      promise.then(function(data) {
+        $scope.newsStories = data;
+      });
+    }
+
+
+    // chart option functions
+    // top chart x axis
   	var xTickFormat = function(d) {
   		var dx = $scope.myData[0].values[d] && $scope.myData[0].values[d].x || 0;
   		if (dx > 0) {
@@ -218,25 +222,29 @@ angular.module('yourAppsName.controllers', [])
   		return null;
   	};
 
+    // bottom chart x axis
     var x2TickFormat = function(d) {
       var dx = $scope.myData[0].values[d] && $scope.myData[0].values[d].x || 0;
       return d3.time.format('%b %Y')(new Date(dx));
     };
 
+
     var y1TickFormat = function(d) {
       return d3.format(',f')(d);
     };
 
+    // top chart y axis price
     var y2TickFormat = function(d) {
       return d3.format('s')(d);
     };
 
+    // bottom chart y axis volume
     var y3TickFormat = function(d) {
       return d3.format(',.2s')(d);
     };
 
     var y4TickFormat = function(d) {
-      return d3.format(',.2f')(d);
+      return d3.format(',.2s')(d);
     };
 
     var xValueFunction = function(d, i) {
@@ -248,15 +256,14 @@ angular.module('yourAppsName.controllers', [])
   	$scope.chartOptions = {
       chartType: 'linePlusBarWithFocusChart',
       data: 'myData',
-      noData: 'Loading data...',
       margin: {top: 15, right: 0, bottom: marginBottom, left: 0},
       interpolate: "cardinal",
       useInteractiveGuideline: false,
-      showLegend: false,
+      yShowMaxMin: false,
       tooltips: false,
+      showLegend: false,
       useVoronoi: false,
       xShowMaxMin: false,
-      yShowMaxMin: false,
       xValue: xValueFunction,
       xAxisTickFormat: xTickFormat,
       x2AxisTickFormat: x2TickFormat,
@@ -264,11 +271,11 @@ angular.module('yourAppsName.controllers', [])
       y2AxisTickFormat: y2TickFormat,
       y3AxisTickFormat: y3TickFormat,
       y4AxisTickFormat: y4TickFormat,
-      y1AxisLabel: "Price",
-      y3AxisLabel: "Volume",
       transitionDuration: 500
   	};
+
 }])
+
 
 
 .controller('SearchCtrl', ['$scope', '$state', 'modalService', 'searchService',
@@ -288,13 +295,14 @@ angular.module('yourAppsName.controllers', [])
         .then(function(data) {
           $scope.searchResults = data;
         });
-    }, 750);
+    }, 400);
 
     $scope.goToStock = function(ticker) {
       modalService.closeModal();
       $state.go('app.stock', {stockTicker: ticker});
     };
 }])
+
 
 
 .controller('LoginSignupCtrl', ['$scope', 'modalService', 'userService',
@@ -313,8 +321,6 @@ angular.module('yourAppsName.controllers', [])
     $scope.login = function(user) {
       userService.login(user);
     };
-
 }])
-
 
 ;

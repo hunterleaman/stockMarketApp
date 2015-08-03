@@ -1,7 +1,8 @@
 angular.module('yourAppsName.services', [])
 
 
-.constant('FIREBASE_URL', 'https://stockmarketapp-test.firebaseio.com/')
+.constant('FIREBASE_URL', 'https://stockmarketapp-pre.firebaseio.com/')
+
 
 
 .service('modalService', function($ionicModal) {
@@ -19,21 +20,19 @@ angular.module('yourAppsName.services', [])
         _this.modal.show();
       });
     }
-
     else if(id == 2) {
       $ionicModal.fromTemplateUrl('templates/login.html', {
         scope: null,
-        controller: 'LoginSignupCtrl'
+        controller: 'LoginSearchCtrl'
       }).then(function(modal) {
         _this.modal = modal;
         _this.modal.show();
       });
     }
-
     else if(id == 3) {
       $ionicModal.fromTemplateUrl('templates/signup.html', {
         scope: null,
-        controller: 'LoginSignupCtrl'
+        controller: 'LoginSearchCtrl'
       }).then(function(modal) {
         _this.modal = modal;
         _this.modal.show();
@@ -49,7 +48,41 @@ angular.module('yourAppsName.services', [])
     _this.modal.hide();
     _this.modal.remove();
   };
+
 })
+
+
+
+.factory('encodeURIService', function() {
+  return {
+    encode: function(string) {
+      return encodeURIComponent(string).replace(/\"/g, "%22").replace(/\ /g, "%20").replace(/[!'()]/g, escape);
+    }
+  };
+})
+
+
+
+.factory('dateService', function($filter) {
+
+  var currentDate = function() {
+    var d = new Date();
+    var date = $filter('date')(d, 'yyyy-MM-dd');
+    return date;
+  };
+
+  var oneYearAgoDate = function() {
+    var d = new Date(new Date().setDate(new Date().getDate() - 365));
+    var date = $filter('date')(d, 'yyyy-MM-dd');
+    return date;
+  };
+
+  return {
+    currentDate: currentDate,
+    oneYearAgoDate: oneYearAgoDate
+  };
+})
+
 
 
 .factory('firebaseRef', function($firebase, FIREBASE_URL) {
@@ -60,12 +93,14 @@ angular.module('yourAppsName.services', [])
 })
 
 
+
 .factory('firebaseUserRef', function(firebaseRef) {
 
   var userRef = firebaseRef.child('users');
 
   return userRef;
 })
+
 
 
 .factory('userService', function($rootScope, $window, $timeout, firebaseRef, firebaseUserRef, myStocksArrayService, myStocksCacheService, notesCacheService, modalService) {
@@ -78,15 +113,13 @@ angular.module('yourAppsName.services', [])
     }, function(error, authData) {
       if (error) {
         console.log("Login Failed!", error);
-      }
-      else {
-        $rootScope.currentUser = user;
+      } else {
+        $rootScope.currentUser = authData;
 
         if(signup) {
           modalService.closeModal();
         }
         else {
-          console.log(authData);
           myStocksCacheService.removeAll();
           notesCacheService.removeAll();
 
@@ -109,8 +142,7 @@ angular.module('yourAppsName.services', [])
     }, function(error, userData) {
       if (error) {
         console.log("Error creating user:", error);
-      }
-      else {
+      } else {
         login(user, true);
         firebaseRef.child('emails').push(user.email);
         firebaseUserRef.child(userData.uid).child('stocks').set(myStocksArrayService);
@@ -119,6 +151,7 @@ angular.module('yourAppsName.services', [])
 
         stocksWithNotes.forEach(function(stockWithNotes) {
           var notes = notesCacheService.get(stockWithNotes);
+
           notes.forEach(function(note) {
             firebaseUserRef.child(userData.uid).child('notes').child(note.ticker).push(note);
           });
@@ -155,21 +188,21 @@ angular.module('yourAppsName.services', [])
         var stockToAdd = {ticker: stock.ticker};
         stocksFromDatabase.push(stockToAdd);
       });
+
       myStocksCacheService.put('myStocks', stocksFromDatabase);
     },
     function(error) {
-      console.log("Firebase error -> stocks: " + error);
+      console.log("Firebase error –> stocks" + error);
     });
 
     firebaseUserRef.child(authData.uid).child('notes').once('value', function(snapshot) {
 
       snapshot.forEach(function(stocksWithNotes) {
-        var notesFromDatabse = [];
-
+        var notesFromDatabase = [];
         stocksWithNotes.forEach(function(note) {
-          notesFromDatabse.push(note.val());
+          notesFromDatabase.push(note.val());
           var cacheKey = note.child('ticker').val();
-          notesCacheService.put(cacheKey, notesFromDatabse);
+          notesCacheService.put(cacheKey, notesFromDatabase);
         });
       });
     },
@@ -194,96 +227,8 @@ angular.module('yourAppsName.services', [])
     updateNotes: updateNotes,
     getUser: getUser
   };
-
 })
 
-
-.factory('encodeURIService', function() {
-  return {
-    encode: function(string) {
-      return encodeURIComponent(string).replace(/\"/g, "%22").replace(/\ /g, "%20").replace(/[!'()]/g, escape);
-    }
-  };
-})
-
-
-.factory('dateService', function($filter) {
-
-  var currentDate = function() {
-    var d = new Date();
-    var date = $filter('date')(d, 'yyyy-MM-dd');
-    return date;
-  };
-
-  var oneYearAgoDate = function() {
-    var d = new Date(new Date().setDate(new Date().getDate() - 365));
-    var date = $filter('date')(d, 'yyyy-MM-dd');
-    return date;
-  };
-
-  return {
-    currentDate: currentDate,
-    oneYearAgoDate: oneYearAgoDate
-  };
-})
-
-
-.factory('fillMyStocksCacheService', function(CacheFactory) {
-
-  var myStocksCache;
-
-  if(!CacheFactory.get('myStocksCache')) {
-    myStocksCache = CacheFactory('myStocksCache', {
-      storageMode: 'localStorage'
-    });
-  }
-  else {
-    myStocksCache = CacheFactory.get('myStocksCache');
-  }
-
-  var fillMyStocksCache = function() {
-
-    var myStocksArray = [
-        {ticker: "AAPL"},
-        {ticker: "GPRO"},
-        {ticker: "FB"},
-        {ticker: "NFLX"},
-        {ticker: "TSLA"},
-        {ticker: "BRK-A"},
-        {ticker: "INTC"},
-        {ticker: "MSFT"},
-        {ticker: "GE"},
-        {ticker: "BAC"},
-        {ticker: "C"},
-        {ticker: "T"}
-    ];
-
-    myStocksCache.put('myStocks', myStocksArray);
-  };
-
-  return {
-    fillMyStocksCache: fillMyStocksCache
-  };
-})
-
-
-.factory('myStocksCacheService', function(CacheFactory) {
-
-  var myStocksCache = CacheFactory.get('myStocksCache');
-
-  return myStocksCache;
-})
-
-
-.factory('myStocksArrayService', function(fillMyStocksCacheService, myStocksCacheService) {
-
-  if(!myStocksCacheService.info('myStocks')) {
-    fillMyStocksCacheService.fillMyStocksCache();
-  }
-
-  myStocks = myStocksCacheService.get('myStocks');
-  return myStocks;
-})
 
 
 .factory('chartDataCacheService', function(CacheFactory) {
@@ -306,13 +251,14 @@ angular.module('yourAppsName.services', [])
 })
 
 
+
 .factory('stockDetailsCacheService', function(CacheFactory) {
 
   var stockDetailsCache;
 
   if(!CacheFactory.get('stockDetailsCache')) {
     stockDetailsCache = CacheFactory('stockDetailsCache', {
-      maxAge: 600 * 1000,
+      maxAge: 60 * 1000,
       deleteOnExpire: 'aggressive',
       storageMode: 'localStorage'
     });
@@ -325,24 +271,25 @@ angular.module('yourAppsName.services', [])
 })
 
 
-.factory('stockPriceCacheService', function(CacheFactory) {  //1x
 
-  var stockPriceCache;                                       //1x
+.factory('stockPriceCacheService', function(CacheFactory) {
 
-  if(!CacheFactory.get('stockPriceCache')) {                 //1x
-    stockPriceCache = CacheFactory('stockPriceCache', {      //2x
-      maxAge: 500 * 1000,                                             //5 * 1000
+  var stockPriceCache;
+
+  if(!CacheFactory.get('stockPriceCache')) {
+    stockPriceCache = CacheFactory('stockPriceCache', {
+      maxAge: 5 * 1000,
       deleteOnExpire: 'aggressive',
       storageMode: 'localStorage'
     });
   }
   else {
-    stockPriceCache = CacheFactory.get('stockPriceCache');    //2x
+    stockPriceCache = CacheFactory.get('stockPriceCache');
   }
 
-  return stockPriceCache;                                     //1x
-
+  return stockPriceCache;
 })
+
 
 
 .factory('notesCacheService', function(CacheFactory) {
@@ -360,6 +307,69 @@ angular.module('yourAppsName.services', [])
 
   return notesCache;
 })
+
+
+
+.factory('fillMyStocksCacheService', function(CacheFactory) {
+
+  var myStocksCache;
+
+  if(!CacheFactory.get('myStocksCache')) {
+    myStocksCache = CacheFactory('myStocksCache', {
+      storageMode: 'localStorage'
+    });
+  }
+  else {
+    myStocksCache = CacheFactory.get('myStocksCache');
+  }
+
+  var fillMyStocksCache = function() {
+
+    var myStocksArray = [
+      {ticker: "AAPL"},
+      {ticker: "GPRO"},
+      {ticker: "FB"},
+      {ticker: "NFLX"},
+      {ticker: "TSLA"},
+      {ticker: "BRK-A"},
+      {ticker: "INTC"},
+      {ticker: "MSFT"},
+      {ticker: "GE"},
+      {ticker: "BAC"},
+      {ticker: "C"},
+      {ticker: "T"}
+    ];
+
+    myStocksCache.put('myStocks', myStocksArray);
+  };
+
+  return {
+    fillMyStocksCache: fillMyStocksCache
+  };
+})
+
+
+
+.factory('myStocksCacheService', function(CacheFactory) {
+
+  var myStocksCache = CacheFactory.get('myStocksCache');
+
+  return myStocksCache;
+})
+
+
+
+.factory('myStocksArrayService', function(fillMyStocksCacheService, myStocksCacheService) {
+
+  if(!myStocksCacheService.info('myStocks')) {
+    fillMyStocksCacheService.fillMyStocksCache();
+  }
+
+  var myStocks = myStocksCacheService.get('myStocks');
+
+  return myStocks;
+})
+
 
 
 .factory('followStockService', function(myStocksArrayService, myStocksCacheService, userService) {
@@ -403,34 +413,15 @@ angular.module('yourAppsName.services', [])
           return true;
         }
       }
+
       return false;
     }
   };
-
 })
 
 
+
 .factory('stockDataService', function($q, $http, encodeURIService, stockDetailsCacheService, stockPriceCacheService) {
-
-  stockDetailsCacheService.setOptions({
-    onExpire: function(key, value) {
-      getDetailsData(key)
-        .then(function() {
-        }, function() {
-          stockDetailsCacheService.put(key, value);
-        });
-    }
-  });
-
-  stockPriceCacheService.setOptions({                 //1x
-    onExpire: function(key, value) {
-      getPriceData(key)                               //1x
-        .then(function() {
-        }, function() {
-          stockPriceCacheService.put(key, value);     //1x
-        });
-    }
-  });
 
   var getDetailsData = function(ticker) {
 
@@ -447,7 +438,7 @@ angular.module('yourAppsName.services', [])
     }
     else {
       $http.get(url)
-        .success(function(json){
+        .success(function(json) {
           var jsonData = json.query.results.quote;
           deferred.resolve(jsonData);
           stockDetailsCacheService.put(cacheKey, jsonData);
@@ -456,7 +447,7 @@ angular.module('yourAppsName.services', [])
           console.log("Details data error: " + error);
           deferred.reject();
         });
-      }
+    }
 
     return deferred.promise;
   };
@@ -466,25 +457,19 @@ angular.module('yourAppsName.services', [])
     var deferred = $q.defer(),
 
     cacheKey = ticker,
-    stockPriceCache = stockPriceCacheService.get(cacheKey),
 
     url = "http://finance.yahoo.com/webservice/v1/symbols/" + ticker + "/quote?format=json&view=detail";
 
-    if(stockPriceCache) {
-      deferred.resolve(stockPriceCache);
-    }
-    else {
-      $http.get(url)
-        .success(function(json){
-          var jsonData = json.list.resources[0].resource.fields;
-          deferred.resolve(jsonData);
-          stockPriceCacheService.put(cacheKey, jsonData);
-        })
-        .error(function(error) {
-          console.log("Price data error: " + error);
-          deferred.reject();
-        });
-    }
+    $http.get(url)
+      .success(function(json) {
+        var jsonData = json.list.resources[0].resource.fields;
+        stockPriceCacheService.put(cacheKey, jsonData);
+        deferred.resolve(jsonData);
+      })
+      .error(function(error) {
+        console.log("Price data error: " + error);
+        deferred.reject();
+      });
 
     return deferred.promise;
   };
@@ -496,6 +481,7 @@ angular.module('yourAppsName.services', [])
 })
 
 
+
 .factory('chartDataService', function($q, $http, encodeURIService, chartDataCacheService) {
 
   var getHistoricalData = function(ticker, fromDate, todayDate) {
@@ -505,7 +491,7 @@ angular.module('yourAppsName.services', [])
     cacheKey = ticker,
     chartDataCache = chartDataCacheService.get(cacheKey),
 
-    query = 'select * from yahoo.finance.historicaldata where symbol = "' + ticker + '" and startDate = "' + fromDate + '" and endDate = "' + todayDate + '"',
+    query = 'select * from yahoo.finance.historicaldata where symbol = "' + ticker + '" and startDate = "' + fromDate + '" and endDate = "' + todayDate + '"';
     url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIService.encode(query) + '&format=json&env=http://datatables.org/alltables.env';
 
     if(chartDataCache) {
@@ -534,15 +520,15 @@ angular.module('yourAppsName.services', [])
           });
 
           var formattedChartData =
-          '[{' +
-            '"key":' + '"volume",' +
-            '"bar":' + 'true,' +
-            '"values":' + '[' + volumeData + ']' +
-          '},' +
-          '{' +
-            '"key":' + '"' + ticker + '",' +
-            '"values":' + '[' + priceData + ']' +
-          '}]';
+            '[{' +
+              '"key":' + '"volume",' +
+              '"bar":' + 'true,' +
+              '"values":' + '[' + volumeData + ']' +
+            '},' +
+            '{' +
+              '"key":' + '"' + ticker + '",' +
+              '"values":' + '[' + priceData + ']' +
+            '}]';
 
           deferred.resolve(formattedChartData);
           chartDataCacheService.put(cacheKey, formattedChartData);
@@ -562,9 +548,11 @@ angular.module('yourAppsName.services', [])
 })
 
 
+
 .factory('notesService', function(notesCacheService, userService) {
 
   return {
+
     getNotes: function(ticker) {
       return notesCacheService.get(ticker);
     },
@@ -606,6 +594,7 @@ angular.module('yourAppsName.services', [])
 })
 
 
+
 .factory('newsService', function($q, $http) {
 
   return {
@@ -616,7 +605,7 @@ angular.module('yourAppsName.services', [])
 
       x2js = new X2JS(),
 
-      url = "http://finance.yahoo.com/rss/headline?s=" + ticker;
+      url = "http://finance.yaho.com/rss/headline?s=" + ticker;
 
       $http.get(url)
         .success(function(xml) {
@@ -636,6 +625,7 @@ angular.module('yourAppsName.services', [])
 })
 
 
+
 .factory('searchService', function($q, $http) {
 
   return {
@@ -644,7 +634,7 @@ angular.module('yourAppsName.services', [])
 
       var deferred = $q.defer(),
 
-      url = 'http://d.yimg.com/autoc.finance.yahoo.com/autoc?query="' + query + '"&callback=YAHOO.Finance.SymbolSuggest.ssCallback',
+      url = 'http://d.yimg.com/autoc.finance.yahoo.com/autoc?query="' + query + '"&callback=YAHOO.Finance.SymbolSuggest.ssCallback';
 
       YAHOO = window.YAHOO = {
         Finance: {
@@ -664,6 +654,5 @@ angular.module('yourAppsName.services', [])
     }
   };
 })
-
 
 ;

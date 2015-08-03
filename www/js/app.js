@@ -2,6 +2,7 @@ angular.module('yourAppsName', [
   'ionic',
   'firebase',
   'angular-cache',
+  'ngCordova',
   'nvd3',
   'nvChart',
   'cb.x2js',
@@ -22,7 +23,7 @@ angular.module('yourAppsName', [
 
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
+      StatusBar.styleHex("#FFFFFF");
     }
   });
 })

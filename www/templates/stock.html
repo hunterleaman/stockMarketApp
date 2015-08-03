@@ -111,10 +111,12 @@
     </div>
 
 
-    <div class="card">
+    <div class="card" id="stock-news">
       <div class="item item-divider">News</div>
-      <a class="item item-icon-right">
-        <h2>News Story Title</h2>
+      <a class="item item-icon-right" ng-repeat="story in newsStories" ng-click="openWindow(story.link)">
+        <h2>{{story.title}}</h2>
+        <h6>{{story.pubDate | characters:17:false:false}}</h6>
+        <p ng-if="story.description.length > 0">{{story.description | characters:200:false:true}}</p>
         <i class="icon ion-ios-arrow-right"></i>
       </a>
     </div>

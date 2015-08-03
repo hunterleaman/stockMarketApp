@@ -46,5 +46,14 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "cordova-plugin-statusbar": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/apache/cordova-plugin-statusbar.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

@@ -202,7 +202,7 @@
 }
 
 #short-button-bar {
-  -webkit-box-shadow: 0px 0px 0px 1px #ddd;
+  border-bottom: 1px solid #eee;
 }
 
 
@@ -328,7 +328,7 @@
 }
 
 .display-flex {
-  display: flex !important;
+  display: -webkit-flex !important;
 }
 
 .font-normal {

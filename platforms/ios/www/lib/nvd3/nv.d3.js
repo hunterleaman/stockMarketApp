@@ -4,7 +4,7 @@ var nv = window.nv || {};
 
 
 nv.version = '1.1.15b';
-nv.dev = true //set false when in production
+nv.dev = true; //set false when in production
 
 window.nv = nv;
 
@@ -43,7 +43,7 @@ nv.log = function() {
   if (nv.dev && console.log && console.log.apply)
 
     // Arguments Count
-    console.log.apply(console, arguments)
+    console.log.apply(console, arguments);
 
   else if (nv.dev && typeof console.log == "function" && Function.prototype.bind) {
     var log = Function.prototype.bind.call(console.log, console);
@@ -278,7 +278,7 @@ nv.interactiveGuideline = function() {
 				 		;
 				 	line.exit().remove();
 
-				}
+				};
 		});
 	}
 
@@ -342,7 +342,7 @@ Has the following known issues:
 nv.interactiveBisect = function (values, searchVal, xAccessor) {
 	  "use strict";
       if (! values instanceof Array) return null;
-      if (typeof xAccessor !== 'function') xAccessor = function(d,i) { return d.x;}
+      if (typeof xAccessor !== 'function') xAccessor = function(d,i) { return d.x;};
 
       var bisect = d3.bisector(xAccessor).left;
       var index = d3.max([0, bisect(values,searchVal) - 1]);
@@ -358,7 +358,7 @@ nv.interactiveBisect = function (values, searchVal, xAccessor) {
       if (Math.abs(nextValue - searchVal) >= Math.abs(currentValue - searchVal))
           return index;
       else
-          return nextIndex
+          return nextIndex;
 };
 
 /*
@@ -465,22 +465,22 @@ window.nv.tooltip.* also has various helper methods.
                 .data([d])
                 .enter().append("tbody");
             var trowEnter = tbodyEnter.selectAll("tr")
-                .data(function(p) { return p.series})
+                .data(function(p) { return p.series;})
                 .enter()
                 .append("tr")
-                .classed("highlight", function(p) { return p.highlight})
+                .classed("highlight", function(p) { return p.highlight;})
                 ;
 
             trowEnter.append("td")
                 .classed("legend-color-guide",true)
                 .append("div")
-                    .style("background-color", function(p) { return p.color});
+                    .style("background-color", function(p) { return p.color;});
             trowEnter.append("td")
                 .classed("key",true)
-                .html(function(p) {return p.key});
+                .html(function(p) {return p.key;});
             trowEnter.append("td")
                 .classed("value",true)
-                .html(function(p,i) { return valueFormatter(p.value,i) });
+                .html(function(p,i) { return valueFormatter(p.value,i); });
 
 
             trowEnter.selectAll("td").each(function(p) {
@@ -545,7 +545,7 @@ window.nv.tooltip.* also has various helper methods.
 
             container.node().innerHTML = newContent;
             container.style("top",0).style("left",0).style("opacity",0);
-            container.selectAll("div, table, td, tr").classed(nvPointerEventsClass,true)
+            container.selectAll("div, table, td, tr").classed(nvPointerEventsClass,true);
             container.classed(nvPointerEventsClass,true);
             return container.node();
         }
@@ -595,7 +595,7 @@ window.nv.tooltip.* also has various helper methods.
 
             nv.tooltip.calcTooltipPosition([left,top], gravity, distance, container);
             return nvtooltip;
-        };
+        }
 
         nvtooltip.nvPointerEventsClass = nvPointerEventsClass;
 
@@ -905,8 +905,8 @@ nv.utils.windowResize = function(fun){
   window.onresize = function(e) {
     if (typeof oldresize == 'function') oldresize(e);
     fun(e);
-  }
-}
+  };
+};
 
 // Backwards compatible way to implement more d3-like coloring of graphs.
 // If passed an array, wrap it in a function which implements the old default
@@ -919,19 +919,19 @@ nv.utils.getColor = function(color) {
     else
         return color;
         //can't really help it if someone passes rubbish as color
-}
+};
 
 // Default color chooser uses the index of an object as before.
 nv.utils.defaultColor = function() {
     var colors = d3.scale.category20().range();
-    return function(d, i) { return d.color || colors[i % colors.length] };
-}
+    return function(d, i) { return d.color || colors[i % colors.length]; };
+};
 
 
 // Returns a color function that takes the result of 'getKey' for each series and
 // looks for a corresponding color from the dictionary,
 nv.utils.customTheme = function(dictionary, getKey, defaultColors) {
-  getKey = getKey || function(series) { return series.key }; // use default series.key if getKey is undefined
+  getKey = getKey || function(series) { return series.key; }; // use default series.key if getKey is undefined
   defaultColors = defaultColors || d3.scale.category20().range(); //default color function
 
   var defIndex = defaultColors.length; //current default color (going in reverse)
@@ -945,8 +945,8 @@ nv.utils.customTheme = function(dictionary, getKey, defaultColors) {
       return (typeof dictionary[key] === "function") ? dictionary[key]() : dictionary[key];
     else
       return defaultColors[--defIndex]; // no match in dictionary, use default color
-  }
-}
+  };
+};
 
 
 
@@ -971,7 +971,7 @@ nv.utils.pjax = function(links, content) {
   d3.select(window).on("popstate", function() {
     if (d3.event.state) load(d3.event.state);
   });
-}
+};
 
 /* For situations where we want to approximate the width in pixels for an SVG:text element.
 Most common instance is when the element is in a display:none; container.
