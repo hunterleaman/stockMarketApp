@@ -94,9 +94,18 @@ angular.module('yourAppsName.services', [])
 
 
 
-.factory('userService', function($rootScope, firebaseRef, modalService) {
+.factory('firebaseUserRef', function(firebaseRef) {
 
-  var login = function(user) {
+  var userRef = firebaseRef.child('users');
+
+  return userRef;
+})
+
+
+
+.factory('userService', function($rootScope, $window, $timeout, firebaseRef, firebaseUserRef, myStocksArrayService, myStocksCacheService, notesCacheService, modalService) {
+
+  var login = function(user, signup) {
 
     firebaseRef.authWithPassword({
       email    : user.email,
@@ -104,10 +113,23 @@ angular.module('yourAppsName.services', [])
     }, function(error, authData) {
       if (error) {
         console.log("Login Failed!", error);
-      }
-      else {
-        $rootScope.currentUser = user;
-        modalService.closeModal();
+      } else {
+        $rootScope.currentUser = authData;
+
+        if(signup) {
+          modalService.closeModal();
+        }
+        else {
+          myStocksCacheService.removeAll();
+          notesCacheService.removeAll();
+
+          loadUserData(authData);
+
+          modalService.closeModal();
+          $timeout(function() {
+            $window.location.reload(true);
+          }, 400);
+        }
       }
     });
   };
@@ -120,16 +142,73 @@ angular.module('yourAppsName.services', [])
     }, function(error, userData) {
       if (error) {
         console.log("Error creating user:", error);
-      }
-      else {
-        login(user);
+      } else {
+        login(user, true);
+        firebaseRef.child('emails').push(user.email);
+        firebaseUserRef.child(userData.uid).child('stocks').set(myStocksArrayService);
+
+        var stocksWithNotes = notesCacheService.keys();
+
+        stocksWithNotes.forEach(function(stockWithNotes) {
+          var notes = notesCacheService.get(stockWithNotes);
+
+          notes.forEach(function(note) {
+            firebaseUserRef.child(userData.uid).child('notes').child(note.ticker).push(note);
+          });
+        });
       }
     });
   };
 
   var logout = function() {
     firebaseRef.unauth();
+    notesCacheService.removeAll();
+    myStocksCacheService.removeAll();
+    $window.location.reload(true);
     $rootScope.currentUser = '';
+  };
+
+  var updateStocks = function(stocks) {
+    firebaseUserRef.child(getUser().uid).child('stocks').set(stocks);
+  };
+
+  var updateNotes = function(ticker, notes) {
+    firebaseUserRef.child(getUser().uid).child('notes').child(ticker).remove();
+    notes.forEach(function(note) {
+      firebaseUserRef.child(getUser().uid).child('notes').child(note.ticker).push(note);
+    });
+  };
+
+  var loadUserData = function(authData) {
+
+    firebaseUserRef.child(authData.uid).child('stocks').once('value', function(snapshot) {
+      var stocksFromDatabase = [];
+
+      snapshot.val().forEach(function(stock) {
+        var stockToAdd = {ticker: stock.ticker};
+        stocksFromDatabase.push(stockToAdd);
+      });
+
+      myStocksCacheService.put('myStocks', stocksFromDatabase);
+    },
+    function(error) {
+      console.log("Firebase error –> stocks" + error);
+    });
+
+    firebaseUserRef.child(authData.uid).child('notes').once('value', function(snapshot) {
+
+      snapshot.forEach(function(stocksWithNotes) {
+        var notesFromDatabase = [];
+        stocksWithNotes.forEach(function(note) {
+          notesFromDatabase.push(note.val());
+          var cacheKey = note.child('ticker').val();
+          notesCacheService.put(cacheKey, notesFromDatabase);
+        });
+      });
+    },
+    function(error) {
+      console.log("Firebase error –> notes: " + error);
+    });
   };
 
   var getUser = function() {
@@ -143,7 +222,10 @@ angular.module('yourAppsName.services', [])
   return {
     login: login,
     signup: signup,
-    logout: logout
+    logout: logout,
+    updateStocks: updateStocks,
+    updateNotes: updateNotes,
+    getUser: getUser
   };
 })
 
@@ -290,7 +372,7 @@ angular.module('yourAppsName.services', [])
 
 
 
-.factory('followStockService', function(myStocksArrayService, myStocksCacheService) {
+.factory('followStockService', function(myStocksArrayService, myStocksCacheService, userService) {
 
   return {
 
@@ -300,6 +382,10 @@ angular.module('yourAppsName.services', [])
 
       myStocksArrayService.push(stockToAdd);
       myStocksCacheService.put('myStocks', myStocksArrayService);
+
+      if(userService.getUser()) {
+        userService.updateStocks(myStocksArrayService);
+      }
     },
 
     unfollow: function(ticker) {
@@ -310,6 +396,10 @@ angular.module('yourAppsName.services', [])
           myStocksArrayService.splice(i, 1);
           myStocksCacheService.remove('myStocks');
           myStocksCacheService.put('myStocks', myStocksArrayService);
+
+          if(userService.getUser()) {
+            userService.updateStocks(myStocksArrayService);
+          }
 
           break;
         }
@@ -459,7 +549,7 @@ angular.module('yourAppsName.services', [])
 
 
 
-.factory('notesService', function(notesCacheService) {
+.factory('notesService', function(notesCacheService, userService) {
 
   return {
 
@@ -480,6 +570,11 @@ angular.module('yourAppsName.services', [])
       }
 
       notesCacheService.put(ticker, stockNotes);
+
+      if(userService.getUser()) {
+        var notes = notesCacheService.get(ticker);
+        userService.updateNotes(ticker, stockNotes);
+      }
     },
 
     deleteNote: function(ticker, index) {
@@ -489,6 +584,11 @@ angular.module('yourAppsName.services', [])
       stockNotes = notesCacheService.get(ticker);
       stockNotes.splice(index, 1);
       notesCacheService.put(ticker, stockNotes);
+
+      if(userService.getUser()) {
+        var notes = notesCacheService.get(ticker);
+        userService.updateNotes(ticker, stockNotes);
+      }
     }
   };
 })
