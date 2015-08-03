@@ -1,0 +1,45 @@
+<ion-modal-view ng-controller="SearchCtrl" id="search">
+
+  <div class="bar bar-header bar-dark item-input-inset">
+    <div class="item-input-wrapper search-input">
+
+      <i class="ion-ios-search-strong placeholder-icon light"></i>
+
+      <input
+        autofocus
+        ng-model-options="{allowInvalid:true}"
+        type="text"
+        placeholder="Search stocks..."
+        ng-model="searchQuery"
+        ng-change="search()"
+        ng-class="searchQuery.length <= 4 && searchQuery.length > 0 ? 'text-uppercase' : 'text-capitalize'"
+      >
+
+      <i class="icon ion-close-round" ng-click="closeModal()"></i>
+
+    </div>
+  </div>
+
+  <ion-content class="has-header">
+
+    <div class="row row-center" ng-show="searchQuery" ng-hide="searchResults || !searchQuery">
+      <div class="col">
+        <ion-spinner class="spinner-light margin-auto" icon="ripple"></ion-spinner>
+      </div>
+    </div>
+
+    <div class="row row-center" ng-if="searchQuery && searchResults" ng-hide="searchResults.length != 0">
+      <div class="col">
+        <h5 class="light text-align-center">No Results.</h5>
+      </div>
+    </div>
+
+    <ion-list>
+      <ion-item class="item-dark border-none" ng-repeat="result in searchResults" ng-click="goToStock(result.symbol)">
+        <h3 class="light">{{result.symbol}} <span class="font-normal"> — {{result.name}}</span></h3>
+        <h6 class="light">{{result.exchDisp}}</h6>
+      </ion-item>
+    </ion-list>
+
+  </ion-content>
+</ion-modal-view>
