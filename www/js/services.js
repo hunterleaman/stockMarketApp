@@ -628,31 +628,30 @@ angular.module('yourAppsName.services', [])
 
 .factory('searchService', function($q, $http) {
 
-  return {
+    return {
 
-    search: function(query) {
+      search: function(query) {
 
-      var deferred = $q.defer(),
+        var deferred = $q.defer(),
 
-      url = 'http://d.yimg.com/autoc.finance.yahoo.com/autoc?query="' + query + '"&callback=YAHOO.Finance.SymbolSuggest.ssCallback';
+          // sometimes I have to copy and repaste the string below into the
+          // url variable for it to work. Not sure why that is.
+          // https://s.yimg.com/aq/autoc?query=aapl&region=CA&lang=en-CA
+          url = 'https://s.yimg.com/aq/autoc?query=' + query + '&region=CA&lang=en-CA&callback=JSON_CALLBACK';
 
-      YAHOO = window.YAHOO = {
-        Finance: {
-          SymbolSuggest: {}
-        }
-      };
+        $http.jsonp(url)
+          .success(function(data) {
+            var jsonData = data.ResultSet.Result;
+            deferred.resolve(jsonData);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
 
-      YAHOO.Finance.SymbolSuggest.ssCallback = function(data) {
-        var jsonData = data.ResultSet.Result;
-        deferred.resolve(jsonData);
-      };
+        return deferred.promise;
+      }
+    };
+  })
 
-      $http.jsonp(url)
-        .then(YAHOO.Finance.SymbolSuggest.ssCallback);
-
-      return deferred.promise;
-    }
-  };
-})
 
 ;
