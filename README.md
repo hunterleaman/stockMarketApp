@@ -3,6 +3,10 @@
 
 #####Source code from [Rapid Prototyping with Ionic: Build a Data-Driven Mobile App](https://www.udemy.com/learn-ionic-framework-build-a-stock-market-mobile-app/)
 
+### Running locally
+- `npm install` : install build dependencies
+- `ionic serve` : start the app on your browser
+
 --
 
 Copyright (c) 2016 Hunter Leaman
